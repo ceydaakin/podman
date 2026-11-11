@@ -170,6 +170,10 @@ func ParseBuildOpts(cmd *cobra.Command, args []string, buildOpts *BuildFlagsWrap
 		}
 	}
 
+	if cmd.Flag("manifest").Changed && cmd.Flag("tag").Changed && slices.Contains(buildOpts.Tag, buildOpts.Manifest) {
+		return nil, errors.New("the same name must not be specified for both '--tag' and '--manifest'")
+	}
+
 	if buildOpts.StageLabels && !buildOpts.SaveStages {
 		return nil, errors.New(`"--stage-labels" requires "--save-stages"`)
 	}
