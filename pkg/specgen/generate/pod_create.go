@@ -367,6 +367,10 @@ func PodConfigToSpec(rt *libpod.Runtime, spec *specgen.PodSpecGenerator, infraOp
 		}
 
 		spec.Name = name
+	} else {
+		// The source pod has no infra container, so neither does the clone.
+		// Without this, MakePod expects an InfraContainerSpec that was never filled in.
+		spec.NoInfra = true
 	}
 
 	// need to reset hostname, name etc of both pod and infra
